@@ -1,0 +1,7 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Student Manager",
+    "NSPhotoLibraryUsageDescription": "Allow Student Manager to choose a student avatar."
+  },
+  "android": { "app_name": "Student Manager" }
+}

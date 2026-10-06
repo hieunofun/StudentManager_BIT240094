@@ -1,0 +1,7 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Quản lý sinh viên",
+    "NSPhotoLibraryUsageDescription": "Cho phép Quản lý sinh viên chọn ảnh đại diện cho sinh viên."
+  },
+  "android": { "app_name": "Quản lý sinh viên" }
+}

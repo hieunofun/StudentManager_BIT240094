@@ -1,0 +1,35 @@
+node_modules/
+.expo/
+dist/
+web-build/
+build/
+coverage/
+test-results/
+playwright-report/
+expo-env.d.ts
+*.tsbuildinfo
+
+# Generated native projects (Expo Continuous Native Generation)
+/android/
+/ios/
+.kotlin/
+
+# Environment files and signing credentials
+.env
+.env.*
+*.pem
+*.key
+*.jks
+*.keystore
+*.p8
+*.p12
+*.mobileprovision
+credentials.json
+
+# Local editor settings and logs
+.vscode/
+.idea/
+.claude/
+.DS_Store
+Thumbs.db
+*.log

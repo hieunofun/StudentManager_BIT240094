@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Student Manager",
+    "slug": "student-manager-bit240094",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "studentmanagerbit240094",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hieunofun.studentmanager.bit240094",
+      "infoPlist": { "CFBundleAllowMixedLocalizations": true }
+    },
+    "android": {
+      "package": "com.hieunofun.studentmanager.bit240094",
+      "softwareKeyboardLayoutMode": "resize",
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      }
+    },
+    "web": { "output": "single", "favicon": "./assets/images/favicon.png" },
+    "plugins": [
+      "expo-router",
+      ["expo-splash-screen", { "backgroundColor": "#FFFFFF" }],
+      ["expo-image-picker", {
+        "photosPermission": "Allow Student Manager to choose a student avatar.",
+        "cameraPermission": false,
+        "microphonePermission": false
+      }],
+      ["expo-localization", { "supportedLocales": { "ios": ["en", "vi"], "android": ["en", "vi"] } }]
+    ],
+    "locales": { "en": "./locales/en.json", "vi": "./locales/vi.json" },
+    "experiments": { "typedRoutes": true }
+  }
+}
