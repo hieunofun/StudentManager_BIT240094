@@ -9,7 +9,7 @@ Thực hiện ngày 06/10/2026 tại dự án `StudentManager_BIT240094`.
 | `npm test` | 19/19 qua |
 | `npx expo-doctor` | 21/21 qua |
 | `npm run build` | Export bundle Android, iOS và web thành công; không phải APK/IPA |
-| `npm run test:e2e` với Chromium | 17/17 kịch bản qua; không có lỗi runtime |
+| `npm run test:e2e` với Chromium | 20/20 kịch bản qua; không có lỗi runtime |
 | `npx expo prebuild --platform android --no-install` | Qua; tài nguyên tên app en/vi và danh sách ngôn ngữ được tạo đúng |
 | Probe giao diện thực tế | Không có lỗi tràn ngang ở 320, 375, 768, 1024, 1280, 1440, 1920px; quét thêm các khổ giữa 375–1440px |
 
@@ -27,6 +27,9 @@ Các kịch bản web đã kiểm chứng:
 - Tiếng Việt/Anh gồm tiêu đề, nhãn, lỗi và hộp thoại; sự kiện foreground đọc lại ngôn ngữ, không dịch dữ liệu người dùng. Thiết bị dùng tiếng Pháp rơi về tiếng Anh.
 - Các khổ điện thoại/desktop không tràn ngang; các nút và ô nhập vẫn thao tác được trên màn hình 320px.
 - Danh sách 60 sinh viên cuộn được tới mục cuối. Họ tên dài, email dài và mở trực tiếp đường dẫn chi tiết theo id hoạt động ở 320px.
+- Nút Sửa/Xóa nằm cùng dòng với từng sinh viên ở 320/375px, vùng bấm tối thiểu 44px. Nhấn từng nút hoạt động độc lập với phần thông tin mở chi tiết.
+- Sửa trực tiếp từ danh sách mở đúng bản ghi và điền sẵn; Không giữ dữ liệu cũ, Có chỉ thay đổi sinh viên đã chọn, giữ id ổn định.
+- Xóa trực tiếp từ danh sách: Không giữ nguyên; lỗi ghi báo lỗi và giữ sinh viên; nhấn Có liên tiếp chỉ xóa sinh viên đã chọn, dữ liệu còn lại giữ nguyên sau tải lại. Nhãn Sửa/Xóa có bản dịch tiếng Anh.
 
 Kiểm tra native bằng mock trong `npm test`: từ chối quyền không mở picker, hủy trả về null, thao tác copy ảnh được chờ hoàn tất và trả URI trong thư mục documents, lỗi copy báo mã lỗi phù hợp. Kiểm tra lưu trữ cũng xác nhận URI local và id giữ nguyên qua lần đọc tiếp theo.
 

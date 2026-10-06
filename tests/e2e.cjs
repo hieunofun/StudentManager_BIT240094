@@ -185,6 +185,62 @@ async function main() {
     await click(page, 'Hủy');
     assert.deepEqual(errors, []);
     passed('Mobile 320/375 through desktop 1920 have no horizontal overflow or runtime errors');
+    for (const width of [320, 375]) {
+      await page.setViewportSize({ width, height: 812 });
+      const info = await page.getByRole('button', { name: 'Ghi lỗi, BAA220000', exact: true }).boundingBox();
+      const editButton = await page.getByRole('button', { name: 'Sửa: Ghi lỗi', exact: true }).boundingBox();
+      const deleteButton = await page.getByRole('button', { name: 'Xóa: Ghi lỗi', exact: true }).boundingBox();
+      assert.ok(info && editButton && deleteButton);
+      assert.ok(editButton.x >= info.x + info.width - 1);
+      assert.ok(deleteButton.x >= editButton.x + editButton.width);
+      assert.ok(deleteButton.x + deleteButton.width <= width);
+      assert.ok(editButton.width >= 44 && editButton.height >= 44 && deleteButton.width >= 44 && deleteButton.height >= 44);
+      assert.ok(Math.abs((info.y + info.height / 2) - (editButton.y + editButton.height / 2)) < 1);
+      assert.ok(Math.abs((editButton.y + editButton.height / 2) - (deleteButton.y + deleteButton.height / 2)) < 1);
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
+      await page.screenshot({ path: path.join(output, `row-actions-${width}.png`) });
+    }
+    passed('Edit/Delete sit on the same student row, have 44px tap targets, and fit 320/375px phones');
+    await click(page, 'Sửa: Ghi lỗi');
+    await text(page, 'Sửa sinh viên').waitFor();
+    assert.equal(await page.getByRole('textbox', { name: 'Họ tên', exact: true }).inputValue(), 'Ghi lỗi');
+    assert.equal(await page.getByRole('textbox', { name: 'MSSV', exact: true }).inputValue(), 'BAA220000');
+    await fill(page, 'Họ tên', 'Sinh viên sửa từ danh sách');
+    await click(page, 'Lưu');
+    await click(page, 'Không');
+    assert.deepEqual(await data(page), beforeFailedChanges);
+    await click(page, 'Lưu');
+    await click(page, 'Có');
+    await text(page, 'Chi tiết sinh viên').waitFor();
+    await text(page, 'Sinh viên sửa từ danh sách').waitFor();
+    const afterInlineEdit = await data(page);
+    assert.deepEqual(afterInlineEdit[0], beforeFailedChanges[0]);
+    assert.equal(afterInlineEdit[1].id, beforeFailedChanges[1].id);
+    assert.equal(afterInlineEdit[1].name, 'Sinh viên sửa từ danh sách');
+    await click(page, 'Quay lại');
+    passed('Inline Edit opens the selected record; No keeps storage, Yes changes only that stable ID');
+    await click(page, 'Xóa: Sinh viên sửa từ danh sách');
+    await text(page, 'Bạn có muốn xóa thông tin SV không?').waitFor();
+    await click(page, 'Không');
+    assert.deepEqual(await data(page), afterInlineEdit);
+    await page.evaluate((storageKey) => {
+      Storage.prototype.setItem = function (key, value) { if (key === storageKey) throw new Error('Simulated disk full'); return window.originalSetItem.call(this, key, value); };
+    }, key);
+    await click(page, 'Xóa: Sinh viên sửa từ danh sách');
+    await click(page, 'Có');
+    await text(page, 'Không thể lưu dữ liệu. Thay đổi chưa được ghi. Vui lòng thử lại.').waitFor();
+    await text(page, 'Quản lý sinh viên').waitFor();
+    assert.deepEqual(await data(page), afterInlineEdit);
+    await page.evaluate(() => { Storage.prototype.setItem = window.originalSetItem; });
+    await click(page, 'Xóa: Sinh viên sửa từ danh sách');
+    await page.getByRole('button', { name: 'Có', exact: true }).evaluate((element) => { element.click(); element.click(); });
+    await page.getByRole('button', { name: 'Xóa: Sinh viên sửa từ danh sách', exact: true }).waitFor({ state: 'hidden' });
+    assert.deepEqual(await data(page), [afterInlineEdit[0]]);
+    await page.reload();
+    await page.getByRole('button', { name: 'Hiếu đã chỉnh sửa, BIT240094', exact: true }).waitFor();
+    assert.deepEqual(await data(page), [afterInlineEdit[0]]);
+    assert.deepEqual(errors, []);
+    passed('Inline Delete handles No, storage failure, repeated Yes, and removes only the chosen record after reload');
     await context.close();
 
     const english = await browser.newContext({ locale: 'en-US', viewport: { width: 375, height: 812 } });
@@ -208,6 +264,8 @@ async function main() {
     await text(englishPage, 'Do you want to delete this student’s information?').waitFor();
     await click(englishPage, 'No');
     await click(englishPage, 'Back');
+    await englishPage.getByRole('button', { name: 'Edit: English unchanged', exact: true }).waitFor();
+    await englishPage.getByRole('button', { name: 'Delete: English unchanged', exact: true }).waitFor();
     await englishPage.screenshot({ path: path.join(output, 'list-en.png') });
     passed('English labels, errors, edit/delete dialogs and user data');
     await englishPage.evaluate(() => {

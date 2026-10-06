@@ -21,7 +21,7 @@ Bản web dùng chế độ SPA (`web.output: single`), đọc dữ liệu local
 
 ## Đúng ba màn hình
 
-1. `src/app/index.tsx`: danh sách cuộn, avatar, họ tên, MSSV, nút Thêm mới; có trạng thái tải, trống và lỗi đọc dữ liệu.
+1. `src/app/index.tsx`: danh sách cuộn, avatar, họ tên, MSSV, nút Thêm mới; Sửa/Xóa nằm cùng dòng với từng sinh viên. Sửa mở form điền sẵn, Xóa hỏi Có/Không và chỉ xóa khi ghi local thành công. Nhấn phần avatar/họ tên/MSSV mở chi tiết. Có trạng thái tải, trống và lỗi đọc dữ liệu.
 2. `src/app/student/[id].tsx`: chi tiết sinh viên, Quay lại, Sửa và Xóa. Chỉ xóa khi chọn Có trong hộp thoại xác nhận.
 3. `src/app/student-form.tsx`: form chung cho thêm/sửa. Thêm bắt đầu trống; sửa điền sẵn. Chọn Không giữ bản nháp và dữ liệu cũ; Có mới lưu. Hủy/Quay lại không tự lưu. Form cuộn khi mở bàn phím, nút lưu được khóa trong lúc xử lý.
 

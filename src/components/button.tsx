@@ -4,16 +4,18 @@ import { colors } from '@/constants/theme';
 
 type Props = {
   title: string;
+  accessibilityLabel?: string;
   onPress: () => void;
   disabled?: boolean;
   variant?: 'primary' | 'outline' | 'danger';
   style?: StyleProp<ViewStyle>;
 };
 
-export function Button({ title, onPress, disabled = false, variant = 'primary', style }: Props) {
+export function Button({ title, accessibilityLabel, onPress, disabled = false, variant = 'primary', style }: Props) {
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
